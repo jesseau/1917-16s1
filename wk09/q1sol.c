@@ -4,7 +4,7 @@
 
     You cannot use any other libraries.
     Compile using: gcc -Wall -Werror -O -o q1 q1.c
-    Mark using: ./q1
+    Mark using: ./mark q1
 */
 
 #include <stdio.h>
