@@ -39,29 +39,14 @@ int main (int argc, char *argv[]) {
 
 
 long myAtoL(char *message) {
-    long retVal = 0;
-    int numDigits = strlen(message);
-
+    long result = 0;
+    
     int i = 0;
-    int j = numDigits;
-    while (j > 0) {
+    while (message[i] != '\0') {
         long digit = message[i] - '0';
-        int exponent = j - 1;
-        retVal += exponentiate(digit, exponent);
-        i++;
-        j--;
-    }
-
-    return retVal;
-}
-
-long exponentiate(long digit, int exponent) {
-    long retVal = digit;
-    int i = 0;
-    while (i < exponent) {
-        retVal *= 10;
+        result = result*10 + digit;
         i++;
     }
 
-    return retVal;
+    return result;
 }
