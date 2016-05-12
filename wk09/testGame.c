@@ -3,8 +3,8 @@
 #include "Game.h"
 
 int main(int argc, char *argv[]) {
-    int disciplines[] = ...;
-    int dice[] = ...;
+    int disciplines[] = DEFAULT_DISCIPLINES;
+    int dice[] = DEFAULT_DICE;
     Game g = newGame(discipline, dice);
     assert(g != NULL);
 
