@@ -70,6 +70,8 @@ list copy(list l) {
     assert(newList != NULL);
     newList->first = l->first;
 
+    // we need 2 pointers in our "new" list so we know
+    // what to link our "next" to.
     link oldCurr = l->first;
     link newCurr = NULL;
     link newPrev = NULL;
@@ -77,11 +79,14 @@ list copy(list l) {
         newCurr = malloc(sizeof(struct _node));
         assert(newCurr != NULL);
 
+        // copy its value
         newCurr->value = oldCurr->value;
         newCurr->next = NULL;
+        // link our previous node to the newCurr we created
         if (newPrev != NULL) {
             newPrev->next = newCurr;
         }
+        // increment pointers
         newPrev = newCurr;
         oldCurr = oldCurr->next;
     }
@@ -95,20 +100,28 @@ void minToFront(list l) {
     link prev = NULL;
     link curr = l->first; // loop variable
 
-    while (curr != NULL) {
-        if (curr->value < minNode->value) {
-            minPrev = prev;
-            minNode = curr;
+    // our edge cases are 0 and 1-length lists - ignore them
+    if (length(l) >= 2) {
+        while (curr != NULL) {
+            // this won't update if we have already seen our min
+            // and there is more than 1 min
+            if (curr->value < minNode->value) {
+                minPrev = prev;
+                minNode = curr;
+            }
+            prev = curr;
+            curr = curr->next;
         }
-        prev = curr;
-        curr = curr->next;
-    }
 
-    // shift prev first
-    minPrev->next = minNode->next;
-    // then update minnode
-    minNode->next = l->first;
-    l->first = minNode;
+        // edge case - if our min is at the front, do nothing
+        if (minNode->value != l->first->value) {
+            // shift prev first
+            minPrev->next = minNode->next;
+            // then update minnode
+            minNode->next = l->first;
+            l->first = minNode;
+        }
+    }
 }
 
 int main(int argc, char *argv[]) {
