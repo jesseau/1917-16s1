@@ -1,0 +1,230 @@
+Part A - multiple guess
+
+1. How many times does "a" get printed out in the following code?
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[]) {
+    int i = (420 % 42);
+    while (i < 420) {
+        if (i % 42 == 0) {
+            printf("a");
+        }
+        i++;
+    }
+    printf("\n");
+    return EXIT_SUCCESS;
+}
+
+    [A] 9
+    [B] 10
+    [C] 42
+    [D] 420
+    [E] None of the above
+
+2. What does the following code output on a 32-bit machine?
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void foo(char *a, char *b) {
+    printf("%d %d\n, sizeof(a), sizeof(b));
+}
+
+int main(int argc, char *argv[]) {
+    char x[40];
+    char *y = malloc(40 * sizeof(char));
+    printf("%d %d ", sizeof(x), sizeof(y));
+    foo(x, y);
+    return EXIT_SUCCESS;
+}
+
+    [A] 40 40 40 40
+    [B] 4 40 4 40
+    [C] 40 40 4 4
+    [D] 4 4 4 4
+    [E] None of the above
+
+3. At what line does (potential) memory corruption first occur?
+You may assume an int is 4 bytes.
+Note, memory corruption could be uninitialised variables, using memory
+that isn't specifically allocated to you, or using memory beyond what
+you've been allocated.
+
+ 1 #include <stdio.h>
+ 2 #include <stdlib.h>
+ 3
+ 4 int main(int argc, char *argv[]) {
+ 5     int *arr = malloc(16 * sizeof(char));
+ 6     arr[0] = 0;
+ 7     arr[1] = 0;
+ 8     arr[2] = 0;
+ 9     arr[3] = 0;
+10     arr[4] = 0;
+11     arr[5] = 0;
+12     arr[6] = 0;
+-------- 9 lines not shown here --------
+22     arr[15] = 0;
+23     arr[16] = 0;
+24     arr[17] = 0;
+25     return EXIT_SUCCESS;
+26 }
+
+    [A] 10
+    [B] 11
+    [C] 23
+    [D] 24
+    [E] None of the above
+
+4. Consider the following code:
+
+typedef struct e {
+    int x;
+    char y;
+} f;
+
+How can I initialise such a struct with name "g" on the stack?
+(Note, there may be more than 1 answer.)
+
+    [A] struct e g;
+    [B] struct f g;
+    [C] e g;
+    [D] f g;
+    [E] None of the above
+
+5. printf("%p", "hello world") prints the address of "hello world".
+What section of memory does "hello world" reside in?
+
+    [A] Stack
+    [B] Heap
+    [C] Read-only
+    [D] The printf is invalid
+    [E] None of the above
+
+
+
+
+Part B - short answer
+
+1. What is the difference between list and List?
+
+2. What does the following code print?
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void bar(char *a) {
+    *a = 0;
+}
+
+int main(int argc, char *argv[]) {
+    char hello[] = "Hello world!";
+    printf("%s\n", hello);
+    printf("%s\n", hello[4]);
+    bar(&hello[4]);
+    printf("%s\n", hello);
+    return EXIT_SUCCESS;
+}
+
+3. You want to return 4 integers from a function, but functions only
+let you return 1 "thing" at a time. List 2 ways to get around this.
+
+4. Explain what argc and argv are. What is special about argv[0]?
+
+5. (Stolen from Oliver)
+This code compiles. What does the code print out?
+What is wrong with the following code in what it’s trying to do?
+How can it be fixed?
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void foobar(int x, int y) {
+    x *= 2;
+    x += 6 * y;
+}
+
+int main(void) {
+    int x = 2;
+    foobar(x, 2);
+    printf(“%d\n”, x);
+    return EXIT_SUCCESS;
+}
+
+6. (Stolen from Oliver)
+Find two potential flaws with this code, and attempt to fix them.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_LENGTH 20
+#define BUFFER_LENGTH MAX_LENGTH + 1
+
+int main(void) {
+    char s[BUFFER_LENGTH];
+    char c = getchar();
+    int i = 0;
+    while (c != EOF && i < BUFFER_LENGTH) {
+        s[i] = c;
+        i++;
+        c = getchar();
+    }
+    s[i] = ‘\0’;
+    printf(“%s\n”, s);
+    return 0;
+}
+
+7. Write a function
+unsigned int average(unsigned int x, unsigned int y)
+that takes in 2 positive numbers and returns their average.
+Give an example of positive x and y which may cause this
+function to return strange or unexpected values.
+How can you refine the function to avoid this problem without
+losing any extra precision? (i.e. the answer should be equal to
+that integer exactly, or rounded up/down to the nearest integer)
+
+
+
+Part C - no compiler allowed
+
+1. (Stacks and ADTs)
+Recall from lectures that a stack is a data structure which offers
+LIFO access (last in, first out).
+A queue is simply a data structure which offers FIFO access
+(first in, first out, like lining up at a supermarket checkout).
+
+Your task is to implement a Queue ADT using 2 stacks. The stacks
+will also be presented to you as an ADT (so basically, this is
+implementing an ADT using another ADT).
+
+This is what Stack.h looks like:
+---------------------------------------------------------------------
+typedef _stack *Stack;
+
+Stack newStack();          // make an empty Stack
+int height(Stack s);       // # values in Stack
+int isStackEmpty(Stack s); // is Stack empty?
+void push(Stack s, int v); // add value on top 
+int pop(Stack s);          // remove top value
+---------------------------------------------------------------------
+
+This is what Queue.h looks like:
+---------------------------------------------------------------------
+typedef struct _queue {
+    Stack s1;
+    Stack s2;
+} _queue;
+
+typedef _queue *Queue;
+
+Queue newQueue();           // create an empty Queue    
+void queue(Queue q, int v); // add number onto Queue
+int dequeue(Queue q);       // remove number from Queue
+int isQueueEmpty(Queue q);  // is Queue empty?
+---------------------------------------------------------------------
+
+Implement the functions shown in Queue.h. You may assume all the Stack
+ADT functions are correctly implemented in Stack.c, which you cannot see.
+
