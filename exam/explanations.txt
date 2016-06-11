@@ -58,6 +58,7 @@ unsigned int average(unsigned int x, unsigned int y) {
 This fails when the value of x + y exceeds the largest value an unsigned int can hold.
 "return (x/2) + (y/2)" fails because you lose precision when x and y are both odd. So the average of 3 and 3 would return 2, which is imprecise and plain wrong.
 Instead you'd need to "return x + ((y-x)/2)".
+You would also need to check whether x > y or y > x before returning the line above.
 
 
 
