@@ -1,0 +1,77 @@
+Selected explanations
+
+Part A
+
+Q2
+E - none of the above
+First thing that gets printed is the size of x, and it's an array declared on the stack using array notation with an explicit size. So the stack frame actually has information about how big x is. Therefore sizeof(x) = 40 * sizeof(char) = 40.
+Second thing that gets printed is the size of y, but it's a dumb pointer. malloc doesn't give the function any information about how big y is, even though you give malloc a number. So sizeof(y) = 4.
+Any pointers passed into a new function have no contextual information about those pointers - they're just another dumb pointer. So foo(x, y) will print 4 4.
+
+Q3
+A - 10
+There's a nasty bug in line 5 - I used sizeof(char) instead of sizeof(int). char's are defined by the C standard to be 1 byte large.
+I also made the assumption that an int is 4 bytes - so the guaranteed size of the malloc is 16 bytes, which holds 4 integers exactly. arr[0..3] is just fine. However, arr[4] means you're writing over memory that's not yours (aka memory corruption).
+
+Q4
+A or D
+It's not B, because "f" is a type but not "struct f".
+It's not C, because "struct e" is a type but not "e".
+
+Q5
+C - read only memory
+I never expected any of you to have ever tried the printf in the question. However, I assume that you've done char *str = "hello world" before. This gets put into read only memory. So the statements
+
+char *str = "hello world";
+printf("%s\n", str);
+printf("%p\n", str);
+
+and
+
+printf("%s\n", "hello world");
+printf("%s\n", "hello world");
+
+both have the same effect of printing "hello world" and outputting an address which is in read only memory.
+
+
+
+Part B
+
+Q1
+One is an abstract data type and the other is not (i.e. concrete data type)
+
+Q3
+Create a struct to hold these integers and modify your function to return a struct
+Use malloc and create an array for 4 ints
+
+Q4
+argc = argument count
+argv = argument vector (i.e. array of strings)
+argv[0] is always the name of the program, i.e. what you typed to run the program
+e.g. if your current directory is /home/jesse/cs1917 and that directory contains the executable "myProgram", then running it would set argv[0] = "./myProgram"
+However if I was at /home/jesse and wanted to run the executable, I'd type "cs1917/myProgram", and that's the value of argv[0] in that case.
+
+Q7
+unsigned int average(unsigned int x, unsigned int y) {
+    return (x + y) / 2;
+}
+This fails when the value of x + y exceeds the largest value an unsigned int can hold.
+"return (x/2) + (y/2)" fails because you lose precision when x and y are both odd. So the average of 3 and 3 would return 2, which is imprecise and plain wrong.
+Instead you'd need to "return x + ((y-x)/2)".
+
+
+
+Part C
+
+Q1
+You should have either:
+- queue function with very little code and dequeue with lots of code, or
+- queue function with lots of code and dequeue with very little code
+
+My strategy, but yours may be different:
+- newQueue = just remember you need to malloc area for the Queue struct, as well as 2 emptyStack()'s
+- queue = push to s1
+- dequeue
+-- pop everything off s1 and immediately push it on s2 (i.e. "push(q->s2, pop(q->s1))" ) EXCEPT the last element, since queues work opposite to stacks at one end
+-- but since queue puts everything onto s1, pop everything off s2 and immediately push it onto s1 again. the ordering of the elements is maintained prior to dequeue being called
+- isQueueEmpty = isStackEmpty(q->s1)

@@ -227,4 +227,6 @@ int isQueueEmpty(Queue q);  // is Queue empty?
 
 Implement the functions shown in Queue.h. You may assume all the Stack
 ADT functions are correctly implemented in Stack.c, which you cannot see.
+Do not have any asserts in your code - you can assume that the user will
+always do the right thing.
 
